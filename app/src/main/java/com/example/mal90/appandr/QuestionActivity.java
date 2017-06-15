@@ -41,7 +41,7 @@ public class QuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
 
-        generarPregunta();
+        generarPregunta("http://192.168.1.134:8000/appQuestion/?user_key=0000");
 
         /*
         textQuestion = (TextView) findViewById(R.id.textQuestion);
@@ -204,7 +204,7 @@ public class QuestionActivity extends AppCompatActivity {
         }*/
     }
 
-    public void generarPregunta(){
+    public void generarPregunta(String url){
         textQuestion = (TextView) findViewById(R.id.textQuestion);
         buttonRA = (Button) findViewById(R.id.buttonRA);
         buttonRB = (Button) findViewById(R.id.buttonRB);
@@ -214,7 +214,7 @@ public class QuestionActivity extends AppCompatActivity {
         //String code = getIntent().getStringExtra("hash");
         //textView.setText(code);
 
-        url = "http://192.168.1.134:8000/appQuestion/?user_key=0000";
+        //url = "";
 
         webService = Volley.newRequestQueue(QuestionActivity.this);
 
@@ -300,6 +300,7 @@ public class QuestionActivity extends AppCompatActivity {
         webService.add(request);
     }
 
+    //Llama a una función del servidor para indicar que ha avanzado hasta la siguiente ubicación
     public void sendPost(){
         url = "http://192.168.1.134:8000/appProgress/?user_key=0000";
 

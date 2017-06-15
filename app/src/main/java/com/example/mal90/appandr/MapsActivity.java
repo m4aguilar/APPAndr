@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -28,7 +29,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -53,6 +53,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker mCurrLocationMarker;
     RequestQueue webService;
     Button buttonScanner;
+    TextView textView;
 
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1 ;
@@ -66,6 +67,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
 
         buttonScanner = (Button) findViewById(R.id.buttonScanner);
         buttonScanner.setOnClickListener(new View.OnClickListener() {
@@ -144,10 +147,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Añadir marcadores
         generarMarkers("http://192.168.1.134:8000/appMarkers/?user_key=0000");
 
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //Actualizar pista
+        updateTrail("http://192.168.1.134:8000/appTrail/?user_key=0000");
+
 
 
         //Modifica el estilo del mapa
@@ -176,12 +178,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //Toast text = Toast.makeText(getApplicationContext(), "Permiso denegado", Toast.LENGTH_SHORT);
             //text.show();
         }
-        //final String url = "http://192.168.1.134:8000/appPlace/?user_key=0000";
-        //actualidarDatos(url);
-
-
-
-
     }
 
     //Se ejecuta continuamente para obtener la ubicación, se actualiza cada 1000 ms
@@ -231,18 +227,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //move map camera
         LatLng nuevaLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(nuevaLocation));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(nuevaLocation));
+        //mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
 
         //stop location updates
         if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
 
-    public void actualidarDatos(String url){
+
+
+
+    public void updateTrail(String url){
 
         webService = Volley.newRequestQueue(MapsActivity.this);
+        textView = (TextView) findViewById(R.id.textView);
+
 
         JsonObjectRequest request = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -257,14 +258,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             e.printStackTrace();
                         }
                         try {
-                            String latitud = jObj.getString("latitud");
-                            String longitud = jObj.getString("longitud");
-                            String pista = jObj.getString("pista");
-                            double lat = Double.parseDouble(latitud);
-                            double lon = Double.parseDouble(longitud);
-                            //final Marker marker = mMap.addMarker(new MarkerOptions()
-                            //        .position(new LatLng(lat, lon))
-                            //        .title(pista));
+                            String trail = jObj.getString("trail");
+                            textView.setText(trail);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -275,7 +271,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Error.Response", error.toString());
-                        Toast text = Toast.makeText(getApplicationContext(), "onErrorResponse actualizarDatos", Toast.LENGTH_SHORT);
+                        Toast text = Toast.makeText(getApplicationContext(), "onErrorResponse updateTrail", Toast.LENGTH_SHORT);
                         text.show();
 
                     }
@@ -307,7 +303,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 double lat = Double.parseDouble(latitud);
                                 double lon = Double.parseDouble(longitud);
                                 LatLng marker = new LatLng(lat, lon);
-                                
+
                                 mMap.addMarker(new MarkerOptions().position(marker).
                                         icon(BitmapDescriptorFactory.
                                                 defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));

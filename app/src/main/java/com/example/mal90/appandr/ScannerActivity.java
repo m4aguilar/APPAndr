@@ -85,7 +85,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     public void check(final String result){
         //Comunicación con el servidor
-        String url = "http://192.168.0.197:8000/check/?user_key=0000";
+        String url = "http://192.168.1.134:8000/check/?user_key=0000";
 
 
         //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
