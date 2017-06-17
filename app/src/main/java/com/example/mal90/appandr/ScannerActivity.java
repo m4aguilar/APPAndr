@@ -36,10 +36,16 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
     private ZXingScannerView zXingScannerView;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1 ;
     RequestQueue webService;
+    Globals globalVariable;
+    String url, user_key;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
+        globalVariable = (Globals) getApplicationContext();
+        url = globalVariable.getUrl();
+        user_key = globalVariable.getUser_key();
 
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (ContextCompat.checkSelfPermission(this,
@@ -85,7 +91,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     public void check(final String result){
         //Comunicación con el servidor
-        String url = "http://192.168.0.134:8000/check/?user_key=0000";
+        String dir = url + "check" + user_key;
 
 
         //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
@@ -94,7 +100,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
         webService = Volley.newRequestQueue(ScannerActivity.this);
 
         JsonObjectRequest request = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, dir, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {

@@ -54,7 +54,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     RequestQueue webService;
     Button buttonScanner;
     TextView textView;
-
+    Globals globalVariable;
+    String url, user_key;
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1 ;
     GoogleApiClient mGoogleApiClient;
@@ -68,6 +69,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        globalVariable = (Globals) getApplicationContext();
+        url = globalVariable.getUrl();
+        user_key = globalVariable.getUser_key();
 
 
         buttonScanner = (Button) findViewById(R.id.buttonScanner);
@@ -145,10 +149,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         //Añadir marcadores
-        generarMarkers("http://192.168.0.134:8000/appMarkers/?user_key=0000");
+        generarMarkers(url + "appMarkers" + user_key);
 
         //Actualizar pista
-        updateTrail("http://192.168.0.134:8000/appTrail/?user_key=0000");
+        //updateTrail("http://192.168.0.134:8000/appTrail/?user_key=0000");
+        updateTrail(url + "appTrail" + user_key);
 
 
 
@@ -178,6 +183,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //Toast text = Toast.makeText(getApplicationContext(), "Permiso denegado", Toast.LENGTH_SHORT);
             //text.show();
         }
+
     }
 
     //Se ejecuta continuamente para obtener la ubicación, se actualiza cada 1000 ms

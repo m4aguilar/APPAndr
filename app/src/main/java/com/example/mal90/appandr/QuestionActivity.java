@@ -33,15 +33,19 @@ public class QuestionActivity extends AppCompatActivity {
     TextView textQuestion;
     Button buttonRA, buttonRB, buttonRC;
     RequestQueue webService;
-    String url;
     String last;
+    Globals globalVariable;
+    String url, user_key;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
-        generarPregunta("http://192.168.0.134:8000/appQuestion/?user_key=0000");
+        globalVariable = (Globals) getApplicationContext();
+        url = globalVariable.getUrl();
+        user_key = globalVariable.getUser_key();
+        generarPregunta(url + "appQuestion" + user_key);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -55,7 +59,7 @@ public class QuestionActivity extends AppCompatActivity {
                 if(respuesta.equals(correctAnswer)){
                     buttonRA.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondoverde));
                     if(last.equals("1")){
-                        sendPost();
+                        sendPost(url + "appProgress" + user_key);
                         Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
                         startActivityForResult(intent, 0);
                         Toast text = Toast.makeText(getApplicationContext(), "Juego Finalizado", Toast.LENGTH_SHORT);
@@ -63,7 +67,8 @@ public class QuestionActivity extends AppCompatActivity {
                     }else {
                         Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
                         startActivityForResult(intent, 0);
-                        sendPost();
+                        sendPost(url + "appProgress" + user_key);
+
                     }
                 }
                 else{
@@ -76,7 +81,7 @@ public class QuestionActivity extends AppCompatActivity {
                 if(respuesta.equals(correctAnswer)){
                     buttonRB.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondoverde));
                     if(last.equals("1")){
-                        sendPost();
+                        sendPost(url + "appProgress" + user_key);
                         Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
                         startActivityForResult(intent, 0);
                         Toast text = Toast.makeText(getApplicationContext(), "Juego Finalizado", Toast.LENGTH_SHORT);
@@ -84,7 +89,7 @@ public class QuestionActivity extends AppCompatActivity {
                     }else {
                         Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
                         startActivityForResult(intent, 0);
-                        sendPost();
+                        sendPost(url + "appProgress" + user_key);
                     }
                 }
                 else{
@@ -95,7 +100,7 @@ public class QuestionActivity extends AppCompatActivity {
                 if(respuesta.equals(correctAnswer)){
                     buttonRC.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondoverde));
                     if(last.equals("1")){
-                        sendPost();
+                        sendPost(url + "appProgress" + user_key);
                         Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
                         startActivityForResult(intent, 0);
                         Toast text = Toast.makeText(getApplicationContext(), "Juego Finalizado", Toast.LENGTH_SHORT);
@@ -103,7 +108,7 @@ public class QuestionActivity extends AppCompatActivity {
                     }else {
                         Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
                         startActivityForResult(intent, 0);
-                        sendPost();
+                        sendPost(url + "appProgress" + user_key);
                     }
                 }
                 else{
@@ -201,8 +206,8 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     //Llama a una función del servidor para indicar que ha avanzado hasta la siguiente ubicación
-    public void sendPost(){
-        url = "http://192.168.0.134:8000/appProgress/?user_key=0000";
+    public void sendPost(String url){
+
 
         webService = Volley.newRequestQueue(QuestionActivity.this);
 
