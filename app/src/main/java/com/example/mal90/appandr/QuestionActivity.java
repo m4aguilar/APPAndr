@@ -30,118 +30,22 @@ import org.json.JSONObject;
 
 public class QuestionActivity extends AppCompatActivity {
 
-    String code;
     TextView textQuestion;
     Button buttonRA, buttonRB, buttonRC;
     RequestQueue webService;
     String url;
-    String option = "";
+    String last;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
-
-        generarPregunta("http://192.168.1.134:8000/appQuestion/?user_key=0000");
-
-        /*
-        textQuestion = (TextView) findViewById(R.id.textQuestion);
-        buttonRA = (Button) findViewById(R.id.buttonRA);
-        buttonRB = (Button) findViewById(R.id.buttonRB);
-        buttonRC = (Button) findViewById(R.id.buttonRC);
-
-
-        //String code = getIntent().getStringExtra("hash");
-        //textView.setText(code);
-
-        url = "http://192.168.0.197:8000/appQuestion/?user_key=0000";
-
-        webService = Volley.newRequestQueue(QuestionActivity.this);
-
-        JsonObjectRequest request = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        String data = response.toString();
-                        JSONObject jObj = null;
-                        try {
-                            jObj = new JSONObject(data);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            String question = jObj.getString("question");
-                            final String answer1 = jObj.getString("answer1");
-                            final String answer2 = jObj.getString("answer2");
-                            final String answer3 = jObj.getString("answer3");
-                            final String correctAnswer = jObj.getString("correctAnswer");
-
-                            textQuestion.setText(question);
-                            buttonRA.setText(answer1);
-                            buttonRB.setText(answer2);
-                            buttonRC.setText(answer3);
-
-
-                            Toast text = Toast.makeText(getApplicationContext(), "Opcion correcta: " + option, Toast.LENGTH_SHORT);
-                            text.show();
-
-
-                            buttonRA.setOnClickListener(new View.OnClickListener() {
-                                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                                @Override
-                                public void onClick(View v) {
-                                    Toast text = Toast.makeText(getApplicationContext(), "boton 1 pulsado", Toast.LENGTH_SHORT);
-                                    text.show();
-                                    String button = "buttonRA";
-                                    comprobarRespuesta(answer1, correctAnswer, button);
-                                }
-                            });
-                            buttonRB.setOnClickListener(new View.OnClickListener() {
-                                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                                @Override
-                                public void onClick(View v) {
-                                    Toast text = Toast.makeText(getApplicationContext(), "boton 2 pulsado", Toast.LENGTH_SHORT);
-                                    text.show();
-                                    String button = "buttonRB";
-                                    comprobarRespuesta(answer2, correctAnswer, button);
-
-                                }
-                            });
-                            buttonRC.setOnClickListener(new View.OnClickListener() {
-                                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                                @Override
-                                public void onClick(View v) {
-                                    Toast text = Toast.makeText(getApplicationContext(), "boton 3 pulsado", Toast.LENGTH_SHORT);
-                                    text.show();
-                                    String button = "buttonRC";
-                                    comprobarRespuesta(answer3, correctAnswer, button);
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-                        Toast text = Toast.makeText(getApplicationContext(), "onErrorResponse", Toast.LENGTH_SHORT);
-                        text.show();
-
-                    }
-                });
-
-        request.setRetryPolicy(new DefaultRetryPolicy(500000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        webService.add(request);
-        */
+        generarPregunta("http://192.168.0.134:8000/appQuestion/?user_key=0000");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void comprobarRespuesta(String respuesta, String correctAnswer, String button) {
+    public void comprobarRespuesta(String respuesta, String correctAnswer, String button, String last) {
 
         //Para cargar el estilo del boton
         //ContextCompat.getDrawable(this, R.drawable.borderedondo);
@@ -150,22 +54,38 @@ public class QuestionActivity extends AppCompatActivity {
             case "buttonRA":
                 if(respuesta.equals(correctAnswer)){
                     buttonRA.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondoverde));
-                    sendPost();
-                    Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
-                    startActivityForResult(intent, 0);
-
+                    if(last.equals("1")){
+                        sendPost();
+                        Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
+                        startActivityForResult(intent, 0);
+                        Toast text = Toast.makeText(getApplicationContext(), "Juego Finalizado", Toast.LENGTH_SHORT);
+                        text.show();
+                    }else {
+                        Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
+                        startActivityForResult(intent, 0);
+                        sendPost();
+                    }
                 }
                 else{
                     buttonRA.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondorojo));
                 }
                 break;
+
+
             case "buttonRB":
                 if(respuesta.equals(correctAnswer)){
                     buttonRB.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondoverde));
-                    sendPost();
-                    Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
-                    startActivityForResult(intent, 0);
-
+                    if(last.equals("1")){
+                        sendPost();
+                        Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
+                        startActivityForResult(intent, 0);
+                        Toast text = Toast.makeText(getApplicationContext(), "Juego Finalizado", Toast.LENGTH_SHORT);
+                        text.show();
+                    }else {
+                        Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
+                        startActivityForResult(intent, 0);
+                        sendPost();
+                    }
                 }
                 else{
                     buttonRB.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondorojo));
@@ -174,34 +94,23 @@ public class QuestionActivity extends AppCompatActivity {
             case "buttonRC":
                 if(respuesta.equals(correctAnswer)){
                     buttonRC.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondoverde));
-                    sendPost();
-                    Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
-                    startActivityForResult(intent, 0);
+                    if(last.equals("1")){
+                        sendPost();
+                        Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
+                        startActivityForResult(intent, 0);
+                        Toast text = Toast.makeText(getApplicationContext(), "Juego Finalizado", Toast.LENGTH_SHORT);
+                        text.show();
+                    }else {
+                        Intent intent= new Intent(QuestionActivity.this, MapsActivity.class);
+                        startActivityForResult(intent, 0);
+                        sendPost();
+                    }
                 }
                 else{
                     buttonRC.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondorojo));
                 }
                 break;
         }
-
-
-        /*switch (option) {
-            case "A":
-                buttonRA.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondorojo));
-                buttonRB.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondo));
-                buttonRC.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondo));
-                break;
-            case "B":
-                buttonRA.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondo));
-                buttonRB.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondoverde));
-                buttonRC.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondo));
-                break;
-            case "C":
-                buttonRA.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondo));
-                buttonRB.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondo));
-                buttonRC.setBackground(ContextCompat.getDrawable(this, R.drawable.borderedondorojo));
-                break;
-        }*/
     }
 
     public void generarPregunta(String url){
@@ -209,12 +118,6 @@ public class QuestionActivity extends AppCompatActivity {
         buttonRA = (Button) findViewById(R.id.buttonRA);
         buttonRB = (Button) findViewById(R.id.buttonRB);
         buttonRC = (Button) findViewById(R.id.buttonRC);
-
-
-        //String code = getIntent().getStringExtra("hash");
-        //textView.setText(code);
-
-        //url = "";
 
         webService = Volley.newRequestQueue(QuestionActivity.this);
 
@@ -236,35 +139,32 @@ public class QuestionActivity extends AppCompatActivity {
                             final String answer2 = jObj.getString("answer2");
                             final String answer3 = jObj.getString("answer3");
                             final String correctAnswer = jObj.getString("correctAnswer");
+                            last = jObj.getString("last");
+
 
                             textQuestion.setText(question);
                             buttonRA.setText(answer1);
                             buttonRB.setText(answer2);
                             buttonRC.setText(answer3);
 
-
-                            Toast text = Toast.makeText(getApplicationContext(), "Opcion correcta: " + option, Toast.LENGTH_SHORT);
-                            text.show();
-
-
                             buttonRA.setOnClickListener(new View.OnClickListener() {
                                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                                 @Override
                                 public void onClick(View v) {
-                                    Toast text = Toast.makeText(getApplicationContext(), "boton 1 pulsado", Toast.LENGTH_SHORT);
-                                    text.show();
+                                    //Toast text = Toast.makeText(getApplicationContext(), "boton 1 pulsado", Toast.LENGTH_SHORT);
+                                    //text.show();
                                     String button = "buttonRA";
-                                    comprobarRespuesta(answer1, correctAnswer, button);
+                                    comprobarRespuesta(answer1, correctAnswer, button, last);
                                 }
                             });
                             buttonRB.setOnClickListener(new View.OnClickListener() {
                                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                                 @Override
                                 public void onClick(View v) {
-                                    Toast text = Toast.makeText(getApplicationContext(), "boton 2 pulsado", Toast.LENGTH_SHORT);
-                                    text.show();
+                                    //Toast text = Toast.makeText(getApplicationContext(), "boton 2 pulsado", Toast.LENGTH_SHORT);
+                                    //text.show();
                                     String button = "buttonRB";
-                                    comprobarRespuesta(answer2, correctAnswer, button);
+                                    comprobarRespuesta(answer2, correctAnswer, button, last);
 
                                 }
                             });
@@ -272,10 +172,10 @@ public class QuestionActivity extends AppCompatActivity {
                                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                                 @Override
                                 public void onClick(View v) {
-                                    Toast text = Toast.makeText(getApplicationContext(), "boton 3 pulsado", Toast.LENGTH_SHORT);
-                                    text.show();
+                                    //Toast text = Toast.makeText(getApplicationContext(), "boton 3 pulsado", Toast.LENGTH_SHORT);
+                                    //text.show();
                                     String button = "buttonRC";
-                                    comprobarRespuesta(answer3, correctAnswer, button);
+                                    comprobarRespuesta(answer3, correctAnswer, button, last);
                                 }
                             });
                         } catch (JSONException e) {
@@ -302,7 +202,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     //Llama a una función del servidor para indicar que ha avanzado hasta la siguiente ubicación
     public void sendPost(){
-        url = "http://192.168.1.134:8000/appProgress/?user_key=0000";
+        url = "http://192.168.0.134:8000/appProgress/?user_key=0000";
 
         webService = Volley.newRequestQueue(QuestionActivity.this);
 
@@ -325,14 +225,10 @@ public class QuestionActivity extends AppCompatActivity {
 
                     }
                 });
-
         request.setRetryPolicy(new DefaultRetryPolicy(500000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         webService.add(request);
     }
-
-
-
 }

@@ -145,10 +145,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         //Añadir marcadores
-        generarMarkers("http://192.168.1.134:8000/appMarkers/?user_key=0000");
+        generarMarkers("http://192.168.0.134:8000/appMarkers/?user_key=0000");
 
         //Actualizar pista
-        updateTrail("http://192.168.1.134:8000/appTrail/?user_key=0000");
+        updateTrail("http://192.168.0.134:8000/appTrail/?user_key=0000");
 
 
 
@@ -237,17 +237,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
-
     public void updateTrail(String url){
 
         webService = Volley.newRequestQueue(MapsActivity.this);
         textView = (TextView) findViewById(R.id.textView);
-
-
         JsonObjectRequest request = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
                     @Override
                     public void onResponse(JSONObject response) {
                         String data = response.toString();

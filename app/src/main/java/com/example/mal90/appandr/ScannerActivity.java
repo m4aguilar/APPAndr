@@ -75,7 +75,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
     @Override
     public void handleResult(final Result result) {
         String data = result.getText();
-        Toast.makeText(getApplicationContext(), result.getText(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), result.getText(), Toast.LENGTH_SHORT).show();
         //zXingScannerView.resumeCameraPreview(this);
 
 
@@ -85,7 +85,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     public void check(final String result){
         //Comunicación con el servidor
-        String url = "http://192.168.1.134:8000/check/?user_key=0000";
+        String url = "http://192.168.0.134:8000/check/?user_key=0000";
 
 
         //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
